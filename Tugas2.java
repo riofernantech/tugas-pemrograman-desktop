@@ -26,7 +26,7 @@ class Pesanan {
     }   
 }
 
-class restaurantData {
+class RestaurantData {
     Menu[] menu = new Menu[8];
 
     Pesanan[] daftarPesanan = new Pesanan[4]; 
@@ -35,8 +35,13 @@ class restaurantData {
     Integer total = 0;
 }
 
-class customer extends restaurantData {
+class Customer {
+    private RestaurantData data;
     protected Scanner input = new Scanner(System.in);
+
+    Customer(RestaurantData data) {
+        this.data = data;
+    }
 
     void pilihMenu(Integer num){
         System.out.print("\nPilih menu ke " + num + ": ");
@@ -51,9 +56,9 @@ class customer extends restaurantData {
             System.out.print("Jumlah: ");
             int jumlah = this.input.nextInt();
 
-            Menu menuDipilih = this.menu[Integer.parseInt(pilihan) - 1];
+            Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
 
-            this.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
+            data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
 
             System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
 
@@ -69,10 +74,10 @@ class customer extends restaurantData {
     void pilihBonus(){
         System.out.print("\nKamu mendapatkan bonus minuman! Silakan pilih minuman ");
         System.out.println("\n=== MENU MINUMAN ===");
-        System.out.println("1. " + menu[4].nama + " - Rp " + menu[4].harga);
-        System.out.println("2. " + menu[5].nama + " - Rp " + menu[5].harga);
-        System.out.println("3. " + menu[6].nama + " - Rp " + menu[6].harga);
-        System.out.println("4. " + menu[7].nama + " - Rp " + menu[7].harga);
+        System.out.println("1. " + data.menu[4].nama + " - Rp " + data.menu[4].harga);
+        System.out.println("2. " + data.menu[5].nama + " - Rp " + data.menu[5].harga);
+        System.out.println("3. " + data.menu[6].nama + " - Rp " + data.menu[6].harga);
+        System.out.println("4. " + data.menu[7].nama + " - Rp " + data.menu[7].harga);
 
         try {
             System.out.print("Pilih: ");
@@ -82,9 +87,9 @@ class customer extends restaurantData {
                 throw new Exception("Input tidak boleh kosong");
             }
             
-            Menu menuDipilih = this.menu[Integer.parseInt(pilihan) + 3];
+            Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
 
-            this.daftarBonus[0] = new Pesanan(menuDipilih, 1);
+            data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
 
             System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
 
@@ -110,44 +115,51 @@ class customer extends restaurantData {
     }
 }
 
-class admin extends restaurantData {
+class Admin{
+    private RestaurantData data;
     protected Scanner input = new Scanner(System.in);
 
-    void isiMenu(){
-        this.menu[0] = new Menu("Nasi Goreng", 15000, "makanan");
-        this.menu[1] = new Menu("Mie Ayam", 12000, "makanan");
-        this.menu[2] = new Menu("Sate Ayam", 20000, "makanan");
-        this.menu[3] = new Menu("Gado-Gado", 10000, "makanan");
+    Admin(RestaurantData data) {
+        this.data = data;
+    }
 
-        this.menu[4] = new Menu("Es Teh", 5000, "minuman");
-        this.menu[5] = new Menu("Es Jeruk", 7000, "minuman");
-        this.menu[6] = new Menu("Kopi Hitam", 8000, "minuman");
-        this.menu[7] = new Menu("Jus Alpukat", 15000, "minuman");
+    void isiMenu(){
+        data.menu[0] = new Menu("Nasi Goreng", 15000, "makanan");
+        data.menu[1] = new Menu("Mie Ayam", 12000, "makanan");
+        data.menu[2] = new Menu("Sate Ayam", 20000, "makanan");
+        data.menu[3] = new Menu("Gado-Gado", 10000, "makanan");
+
+        data.menu[4] = new Menu("Es Teh", 5000, "minuman");
+        data.menu[5] = new Menu("Es Jeruk", 7000, "minuman");
+        data.menu[6] = new Menu("Kopi Hitam", 8000, "minuman");
+        data.menu[7] = new Menu("Jus Alpukat", 15000, "minuman");
     }
 
     void tampilkanMenu(){
         System.out.println("=== MENU MAKANAN ===");
-        System.out.println("1. " + menu[0].nama + " - Rp " + menu[0].harga);
-        System.out.println("2. " + menu[1].nama + " - Rp " + menu[1].harga);
-        System.out.println("3. " + menu[2].nama + " - Rp " + menu[2].harga);
-        System.out.println("4. " + menu[3].nama + " - Rp " + menu[3].harga);
+        System.out.println("1. " + data.menu[0].nama + " - Rp " + data.menu[0].harga);
+        System.out.println("2. " + data.menu[1].nama + " - Rp " + data.menu[1].harga);
+        System.out.println("3. " + data.menu[2].nama + " - Rp " + data.menu[2].harga);
+        System.out.println("4. " + data.menu[3].nama + " - Rp " + data.menu[3].harga);
 
         System.out.println("\n=== MENU MINUMAN ===");
-        System.out.println("5. " + menu[4].nama + " - Rp " + menu[4].harga);
-        System.out.println("6. " + menu[5].nama + " - Rp " + menu[5].harga);
-        System.out.println("7. " + menu[6].nama + " - Rp " + menu[6].harga);
-        System.out.println("8. " + menu[7].nama + " - Rp " + menu[7].harga);
+        System.out.println("5. " + data.menu[4].nama + " - Rp " + data.menu[4].harga);
+        System.out.println("6. " + data.menu[5].nama + " - Rp " + data.menu[5].harga);
+        System.out.println("7. " + data.menu[6].nama + " - Rp " + data.menu[6].harga);
+        System.out.println("8. " + data.menu[7].nama + " - Rp " + data.menu[7].harga);
     }
 
 }
 
-class App extends restaurantData{
-    private customer customer;
-    private admin admin;
+class App {
+    private RestaurantData data;
+    private Customer customer;
+    private Admin admin;
 
-    App() {
-        this.customer = new customer();
-        this.admin = new admin();
+    public App() {
+        this.data = new RestaurantData(); 
+        this.admin = new Admin(this.data);
+        this.customer = new Customer(this.data);
     }
 
     void start(){
@@ -181,76 +193,46 @@ class App extends restaurantData{
     }
 
     void hitungTotal() {
-        if (daftarPesanan[0] != null) {
-            this.total += daftarPesanan[0].getTotalHarga();
-        }
-        
-        if (daftarPesanan[1] != null) {
-            this.total += daftarPesanan[1].getTotalHarga();
-        }
-        
-        if (daftarPesanan[2] != null) {
-            this.total += daftarPesanan[2].getTotalHarga();
-        }
-        
-        if (daftarPesanan[3] != null) {
-            this.total += daftarPesanan[3].getTotalHarga();
+        for (Pesanan pesanan : data.daftarPesanan) {
+            if (pesanan != null) {
+                data.total += pesanan.getTotalHarga();
+            }
+            
         }
     }
 
     void cetakStruk(){
         this.hitungTotal();
 
-        int totalSebelumPajak = this.total;
-        int pajak = this.total * 10 / 100;
+        int totalSebelumPajak = data.total;
+        int pajak = data.total * 10 / 100;
         Integer pelayanan = 20000;
 
         int diskon = 0;
-        if (this.total > 100000) {
-            diskon = this.total * 10 / 100;
-            this.total -= diskon;
+        if (data.total > 100000) {
+            diskon = data.total * 10 / 100;
+            data.total -= diskon;
         }
 
         if (totalSebelumPajak > 50000) {
             customer.pilihBonus();
         }
 
-        int totalAkhir = this.total + pajak + pelayanan;
+        int totalAkhir = data.total + pajak + pelayanan;
 
         System.out.println("\n===== DAFTAR PESANAN =====");
         System.out.printf("%-25s %8s %15s%n", "Nama Item", "Jumlah", "Subtotal");
         System.out.println("---------------------------------------------------------");
-        if (daftarPesanan[0] != null) {
-            System.out.printf(
-                "%-25s %8d %15s%n", 
-                daftarPesanan[0].menu.nama, 
-                daftarPesanan[0].jumlah, 
-                "Rp " + daftarPesanan[0].getTotalHarga()
-            );
-        }
-        if (daftarPesanan[1] != null) {
-            System.out.printf(
-                "%-25s %8d %15s%n", 
-                daftarPesanan[1].menu.nama, 
-                daftarPesanan[1].jumlah, 
-                "Rp " + daftarPesanan[1].getTotalHarga()
-            );
-        }
-        if (daftarPesanan[2] != null) {
-            System.out.printf(
-                "%-25s %8d %15s%n", 
-                daftarPesanan[2].menu.nama, 
-                daftarPesanan[2].jumlah, 
-                "Rp " + daftarPesanan[2].getTotalHarga()
-            );
-        }
-        if (daftarPesanan[3] != null) {
-            System.out.printf(
-                "%-25s %8d %15s%n", 
-                daftarPesanan[3].menu.nama, 
-                daftarPesanan[3].jumlah, 
-                "Rp " + daftarPesanan[3].getTotalHarga()
-            );
+
+        for (Pesanan pesanan : data.daftarPesanan) {
+            if (pesanan != null) {
+                System.out.printf(
+                    "%-25s %8d %15s%n", 
+                    pesanan.menu.nama, 
+                    pesanan.jumlah, 
+                    "Rp " + pesanan.getTotalHarga()
+                );
+            }
         }
         
         System.out.println("\n===== STRUK PEMBAYARAN =====");
@@ -261,8 +243,8 @@ class App extends restaurantData{
         System.out.println("----------------------------");
         System.out.println("Total Bayar : Rp " + totalAkhir);
 
-        if (this.daftarBonus[0] != null)
-            System.out.println("\n* BONUS: Anda mendapatkan gratis 1 " + this.daftarBonus[0].menu.nama + "!");
+        if (data.daftarBonus[0] != null)
+            System.out.println("\n* BONUS: Anda mendapatkan gratis 1 " + data.daftarBonus[0].menu.nama + "!");
 
         System.out.println("==============================");
     }
@@ -271,6 +253,8 @@ class App extends restaurantData{
 
 public class Tugas2 {
     public static void main(String[] args) {
-        new App();
+        App app = new App();
+
+        app.start();
     }
 }
