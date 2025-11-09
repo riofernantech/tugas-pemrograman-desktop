@@ -26,68 +26,17 @@ class Pesanan {
     }   
 }
 
-class App {
-    Scanner input = new Scanner(System.in);
-
+class restaurantData {
     Menu[] menu = new Menu[8];
 
     Pesanan[] daftarPesanan = new Pesanan[4]; 
     Pesanan[] daftarBonus = new Pesanan[1];
 
     Integer total = 0;
+}
 
-    App() {
-        this.isiMenu();
-        this.tampilkanMenu();
-
-        this.pilihMenu(1);
-        if (!this.isLanjut()) {
-            cetakStruk();
-            return;
-        }
-        
-        this.pilihMenu(2);
-        if (!this.isLanjut()) {
-            cetakStruk();
-            return;
-        }
-        
-        this.pilihMenu(3);
-        if (!this.isLanjut()) {
-            cetakStruk();
-            return;
-        }
-
-        this.pilihMenu(4);
-        cetakStruk();
-        return;
-    }
-
-    void isiMenu(){
-        this.menu[0] = new Menu("Nasi Goreng", 15000, "makanan");
-        this.menu[1] = new Menu("Mie Ayam", 12000, "makanan");
-        this.menu[2] = new Menu("Sate Ayam", 20000, "makanan");
-        this.menu[3] = new Menu("Gado-Gado", 10000, "makanan");
-
-        this.menu[4] = new Menu("Es Teh", 5000, "minuman");
-        this.menu[5] = new Menu("Es Jeruk", 7000, "minuman");
-        this.menu[6] = new Menu("Kopi Hitam", 8000, "minuman");
-        this.menu[7] = new Menu("Jus Alpukat", 15000, "minuman");
-    }
-
-    void tampilkanMenu(){
-        System.out.println("=== MENU MAKANAN ===");
-        System.out.println("1. " + menu[0].nama + " - Rp " + menu[0].harga);
-        System.out.println("2. " + menu[1].nama + " - Rp " + menu[1].harga);
-        System.out.println("3. " + menu[2].nama + " - Rp " + menu[2].harga);
-        System.out.println("4. " + menu[3].nama + " - Rp " + menu[3].harga);
-
-        System.out.println("\n=== MENU MINUMAN ===");
-        System.out.println("5. " + menu[4].nama + " - Rp " + menu[4].harga);
-        System.out.println("6. " + menu[5].nama + " - Rp " + menu[5].harga);
-        System.out.println("7. " + menu[6].nama + " - Rp " + menu[6].harga);
-        System.out.println("8. " + menu[7].nama + " - Rp " + menu[7].harga);
-    }
+class customer extends restaurantData {
+    protected Scanner input = new Scanner(System.in);
 
     void pilihMenu(Integer num){
         System.out.print("\nPilih menu ke " + num + ": ");
@@ -159,6 +108,77 @@ class App {
         } 
         return false;
     }
+}
+
+class admin extends restaurantData {
+    protected Scanner input = new Scanner(System.in);
+
+    void isiMenu(){
+        this.menu[0] = new Menu("Nasi Goreng", 15000, "makanan");
+        this.menu[1] = new Menu("Mie Ayam", 12000, "makanan");
+        this.menu[2] = new Menu("Sate Ayam", 20000, "makanan");
+        this.menu[3] = new Menu("Gado-Gado", 10000, "makanan");
+
+        this.menu[4] = new Menu("Es Teh", 5000, "minuman");
+        this.menu[5] = new Menu("Es Jeruk", 7000, "minuman");
+        this.menu[6] = new Menu("Kopi Hitam", 8000, "minuman");
+        this.menu[7] = new Menu("Jus Alpukat", 15000, "minuman");
+    }
+
+    void tampilkanMenu(){
+        System.out.println("=== MENU MAKANAN ===");
+        System.out.println("1. " + menu[0].nama + " - Rp " + menu[0].harga);
+        System.out.println("2. " + menu[1].nama + " - Rp " + menu[1].harga);
+        System.out.println("3. " + menu[2].nama + " - Rp " + menu[2].harga);
+        System.out.println("4. " + menu[3].nama + " - Rp " + menu[3].harga);
+
+        System.out.println("\n=== MENU MINUMAN ===");
+        System.out.println("5. " + menu[4].nama + " - Rp " + menu[4].harga);
+        System.out.println("6. " + menu[5].nama + " - Rp " + menu[5].harga);
+        System.out.println("7. " + menu[6].nama + " - Rp " + menu[6].harga);
+        System.out.println("8. " + menu[7].nama + " - Rp " + menu[7].harga);
+    }
+
+}
+
+class App extends restaurantData{
+    private customer customer;
+    private admin admin;
+
+    App() {
+        this.customer = new customer();
+        this.admin = new admin();
+    }
+
+    void start(){
+        admin.isiMenu();
+        admin.tampilkanMenu();
+
+        customer.pilihMenu(1);
+        if (!customer.isLanjut()) {
+            cetakStruk();
+            return;
+        }
+        
+        customer.pilihMenu(2);
+        if (!customer.isLanjut()) {
+            cetakStruk();
+            return;
+        }
+        
+        customer.pilihMenu(3);
+        if (!customer.isLanjut()) {
+            cetakStruk();
+            return;
+        }
+
+        customer.pilihMenu(4);
+        cetakStruk();
+
+        customer.input.close();
+        admin.input.close();
+        return;
+    }
 
     void hitungTotal() {
         if (daftarPesanan[0] != null) {
@@ -192,7 +212,7 @@ class App {
         }
 
         if (totalSebelumPajak > 50000) {
-            this.pilihBonus();
+            customer.pilihBonus();
         }
 
         int totalAkhir = this.total + pajak + pelayanan;
@@ -245,12 +265,11 @@ class App {
             System.out.println("\n* BONUS: Anda mendapatkan gratis 1 " + this.daftarBonus[0].menu.nama + "!");
 
         System.out.println("==============================");
-        this.input.close();
     }
 
 }
 
-public class Tugas1 {
+public class Tugas2 {
     public static void main(String[] args) {
         new App();
     }
