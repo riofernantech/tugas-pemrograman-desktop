@@ -34,6 +34,46 @@ class RestaurantData {
     Pesanan[] daftarBonus = new Pesanan[1];
 
     Integer total = 0;
+
+    protected void addMenu(Menu item) {
+        this.menu.add(item);
+    }
+
+    protected Menu[] getMakanan() {
+        return menu.stream()
+            .filter(item -> item.kategori.equals("makanan"))
+            .toArray(Menu[]::new);
+    }
+
+    protected Menu[] getMinuman() {
+        return menu.stream()
+            .filter(item -> item.kategori.equals("minuman"))
+            .toArray(Menu[]::new);
+    }
+
+    protected Menu getMenuByIndex(int index) {
+        if (index >= 0 && index < menu.size()) {
+            return menu.get(index);
+        }
+        return null;
+    }
+
+    protected Menu getMenuByName(String name) {
+        for (Menu item : menu) {
+            if (item.nama.equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    protected Boolean deleteByIndex(int index) {
+        if (index >= 0 && index < menu.size()) {
+            menu.remove(index);
+            return true;
+        }
+        return false;
+    }
 }
 
 class Customer {
@@ -126,30 +166,28 @@ class Admin{
     }
 
     void isiMenu(){
-        data.menu.add(new Menu("Nasi Goreng", 15000, "makanan"));
-        data.menu.add(new Menu("Mie Ayam", 12000, "makanan"));
-        data.menu.add(new Menu("Sate Ayam", 20000, "makanan"));
-        data.menu.add(new Menu("Gado-Gado", 10000, "makanan"));
+        data.addMenu(new Menu("Nasi Goreng", 15000, "makanan"));
+        data.addMenu(new Menu("Mie Ayam", 12000, "makanan"));
+        data.addMenu(new Menu("Sate Ayam", 20000, "makanan"));
+        data.addMenu(new Menu("Gado-Gado", 10000, "makanan"));
 
-        data.menu.add(new Menu("Es Teh", 5000, "minuman"));
-        data.menu.add(new Menu("Es Jeruk", 7000, "minuman"));
-        data.menu.add(new Menu("Kopi Hitam", 8000, "minuman"));
-        data.menu.add(new Menu("Jus Alpukat", 15000, "minuman"));
+        data.addMenu(new Menu("Es Teh", 5000, "minuman"));
+        data.addMenu(new Menu("Es Jeruk", 7000, "minuman"));
+        data.addMenu(new Menu("Kopi Hitam", 8000, "minuman"));
+        data.addMenu(new Menu("Jus Alpukat", 15000, "minuman"));
     }
 
     void tampilkanMenu(){
         System.out.println("=== MENU MAKANAN ===");
-        for (Menu item : data.menu) {
-            if (item.kategori.equals("makanan")) {
+        Menu[] makanan = data.getMakanan();
+        for (Menu item : makanan) {
                 System.out.println(item.nama + " - Rp " + item.harga);
-            }
         }
 
         System.out.println("\n=== MENU MINUMAN ===");
-        for (Menu item : data.menu) {
-            if (item.kategori.equals("minuman")) {
-                System.out.println(item.nama + " - Rp " + item.harga);
-            }
+        Menu[] minuman = data.getMinuman();
+        for (Menu item : minuman) {
+            System.out.println(item.nama + " - Rp " + item.harga);
         }
     }
 
@@ -170,7 +208,7 @@ class Admin{
                 throw new Exception("Kategori harus 'makanan' atau 'minuman'");
             }
 
-            data.menu.add(new Menu(nama, harga, kategori));
+            data.addMenu(new Menu(nama, harga, kategori));
             System.out.println("Menu baru berhasil ditambahkan.");
           
             this.input.nextLine(); 
