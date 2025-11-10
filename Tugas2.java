@@ -35,8 +35,27 @@ class RestaurantData {
 
     Integer total = 0;
 
-    void addMenu(Menu item) {
-        this.menu.add(item);
+    void addMenu(Menu newItem) {
+        if (menu.isEmpty()) {
+            menu.add(newItem);
+            return;
+        }
+
+        if (newItem.kategori.equalsIgnoreCase("makanan")) {
+            int insertIndex = 0;
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.get(i).kategori.equalsIgnoreCase("minuman")) {
+                    insertIndex = i;
+                    break;
+                }
+                insertIndex = i + 1;
+            }
+            menu.add(insertIndex, newItem);
+        } 
+
+        else {
+            menu.add(newItem);
+        }
     }
 
     Menu[] getMakanan() {
@@ -65,6 +84,14 @@ class RestaurantData {
             }
         }
         return null;
+    }
+
+    Boolean editMenu(int index, Menu newItem) {
+        if (index >= 0 && index < menu.size()) {
+            menu.set(index, newItem);
+            return true;
+        }
+        return false;
     }
 
     Boolean deleteByIndex(int index) {
@@ -186,20 +213,6 @@ class Admin{
         data.addMenu(new Menu("Jus Alpukat", 15000, "minuman"));
     }
 
-    void tampilkanMenu(){
-        System.out.println("=== MENU MAKANAN ===");
-        Menu[] makanan = data.getMakanan();
-        for (Menu item : makanan) {
-                System.out.println(item.nama + " - Rp " + item.harga);
-        }
-
-        System.out.println("\n=== MENU MINUMAN ===");
-        Menu[] minuman = data.getMinuman();
-        for (Menu item : minuman) {
-            System.out.println(item.nama + " - Rp " + item.harga);
-        }
-    }
-
     void tambahMenu(){
         try {
             System.out.print("Masukkan nama menu baru: ");
@@ -232,9 +245,9 @@ class Admin{
     void hapusMenu(){
         try {
             System.out.print("Masukkan nama menu yang akan dihapus: ");
-            String nama = this.input.nextLine();
+            int index = this.input.nextInt();
 
-            if (data.deleteByName(nama)) {
+            if (data.deleteByIndex(index - 1)) {
                 System.out.println("Menu berhasil dihapus.");
             } else {
                 throw new Exception("Nama menu tidak valid.");
@@ -245,6 +258,36 @@ class Admin{
             System.out.println("Input tidak valid. Silakan coba lagi.");
             this.input.nextLine(); 
             this.hapusMenu();
+            return;
+        }
+    }
+
+    void editMenu(){
+        try {
+            System.out.print("Masukkan nomor menu yang akan diubah: ");
+            int index = this.input.nextInt();
+
+            Menu dipilih = data.getMenuByIndex(index - 1);
+                
+            if (dipilih == null) throw new Exception("Nomor menu tidak valid.");
+           
+            this.input.nextLine(); 
+            
+            System.out.println("Menu dipilih : " + dipilih.nama);
+            System.out.print("Masukkan nama baru: ");
+            String namaBaru = this.input.nextLine();
+
+            System.out.print("Masukkan harga baru: ");
+            int hargaBaru = this.input.nextInt();
+            this.input.nextLine(); 
+
+            data.editMenu(index - 1, new Menu(namaBaru, hargaBaru, dipilih.kategori));
+            System.out.println("Menu berhasil diubah.");
+
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.editMenu();
             return;
         }
     }
@@ -264,18 +307,32 @@ class App {
 
     void start(){
         admin.isiMenu();
-        admin.tampilkanMenu();
+        tampilkanMenu();
 
-        admin.tambahMenu();
-        admin.tampilkanMenu();
-
-        admin.hapusMenu();
-        admin.tampilkanMenu();
+        admin.editMenu();
+        tampilkanMenu();
 
         
         customer.input.close();
         admin.input.close();
         return;
+    }
+
+    void tampilkanMenu(){
+        System.out.println("=== MENU MAKANAN ===");
+        int index = 1;
+        Menu[] makanan = data.getMakanan();
+        for (Menu item : makanan) {
+            System.out.println(index + " " + item.nama + " - Rp " + item.harga);
+            index++;
+        }
+        
+        System.out.println("\n=== MENU MINUMAN ===");
+        Menu[] minuman = data.getMinuman();
+        for (Menu item : minuman) {
+            System.out.println(index + " " + item.nama + " - Rp " + item.harga);
+            index++;
+        }
     }
 
     void hitungTotal() {
