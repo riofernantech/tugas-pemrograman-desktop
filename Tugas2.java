@@ -35,30 +35,30 @@ class RestaurantData {
 
     Integer total = 0;
 
-    protected void addMenu(Menu item) {
+    void addMenu(Menu item) {
         this.menu.add(item);
     }
 
-    protected Menu[] getMakanan() {
+    Menu[] getMakanan() {
         return menu.stream()
             .filter(item -> item.kategori.equals("makanan"))
             .toArray(Menu[]::new);
     }
 
-    protected Menu[] getMinuman() {
+    Menu[] getMinuman() {
         return menu.stream()
             .filter(item -> item.kategori.equals("minuman"))
             .toArray(Menu[]::new);
     }
 
-    protected Menu getMenuByIndex(int index) {
+    Menu getMenuByIndex(int index) {
         if (index >= 0 && index < menu.size()) {
             return menu.get(index);
         }
         return null;
     }
 
-    protected Menu getMenuByName(String name) {
+    Menu getMenuByName(String name) {
         for (Menu item : menu) {
             if (item.nama.equalsIgnoreCase(name)) {
                 return item;
@@ -67,9 +67,18 @@ class RestaurantData {
         return null;
     }
 
-    protected Boolean deleteByIndex(int index) {
+    Boolean deleteByIndex(int index) {
         if (index >= 0 && index < menu.size()) {
             menu.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    Boolean deleteByName(String name) {
+        Menu itemToRemove = getMenuByName(name);
+        if (itemToRemove != null) {
+            menu.remove(itemToRemove);
             return true;
         }
         return false;
@@ -220,6 +229,26 @@ class Admin{
         }
     }
 
+    void hapusMenu(){
+        try {
+            System.out.print("Masukkan nama menu yang akan dihapus: ");
+            String nama = this.input.nextLine();
+
+            if (data.deleteByName(nama)) {
+                System.out.println("Menu berhasil dihapus.");
+            } else {
+                throw new Exception("Nama menu tidak valid.");
+            }
+
+            this.input.nextLine(); 
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.hapusMenu();
+            return;
+        }
+    }
+
 }
 
 class App {
@@ -238,6 +267,9 @@ class App {
         admin.tampilkanMenu();
 
         admin.tambahMenu();
+        admin.tampilkanMenu();
+
+        admin.hapusMenu();
         admin.tampilkanMenu();
 
         
