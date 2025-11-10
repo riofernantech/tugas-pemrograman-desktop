@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 class Menu {
     String nama;
@@ -27,9 +28,9 @@ class Pesanan {
 }
 
 class RestaurantData {
-    Menu[] menu = new Menu[8];
-
-    Pesanan[] daftarPesanan = new Pesanan[4]; 
+    ArrayList<Menu> menu = new ArrayList<>();
+    
+    ArrayList<Pesanan> daftarPesanan = new ArrayList<>();
     Pesanan[] daftarBonus = new Pesanan[1];
 
     Integer total = 0;
@@ -54,15 +55,15 @@ class Customer {
             }
             
             System.out.print("Jumlah: ");
-            int jumlah = this.input.nextInt();
+            // int jumlah = this.input.nextInt();
 
-            Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
+            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
 
-            data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
+            // data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
 
-            System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
+            // System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
 
-            this.input.nextLine(); 
+            // this.input.nextLine(); 
         } catch (Exception e) {
             System.out.println("Input tidak valid. Silakan coba lagi.");
             this.input.nextLine(); 
@@ -74,10 +75,11 @@ class Customer {
     void pilihBonus(){
         System.out.print("\nKamu mendapatkan bonus minuman! Silakan pilih minuman ");
         System.out.println("\n=== MENU MINUMAN ===");
-        System.out.println("1. " + data.menu[4].nama + " - Rp " + data.menu[4].harga);
-        System.out.println("2. " + data.menu[5].nama + " - Rp " + data.menu[5].harga);
-        System.out.println("3. " + data.menu[6].nama + " - Rp " + data.menu[6].harga);
-        System.out.println("4. " + data.menu[7].nama + " - Rp " + data.menu[7].harga);
+        for (Menu item : data.menu) {
+            if (item.kategori.equals("minuman")) {
+                System.out.println(item.nama + " - Rp " + item.harga);
+            }
+        }
 
         try {
             System.out.print("Pilih: ");
@@ -87,11 +89,11 @@ class Customer {
                 throw new Exception("Input tidak boleh kosong");
             }
             
-            Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
+            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
 
-            data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
+            // data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
 
-            System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
+            // System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
 
             this.input.nextLine(); 
         } catch (Exception e) {
@@ -124,29 +126,60 @@ class Admin{
     }
 
     void isiMenu(){
-        data.menu[0] = new Menu("Nasi Goreng", 15000, "makanan");
-        data.menu[1] = new Menu("Mie Ayam", 12000, "makanan");
-        data.menu[2] = new Menu("Sate Ayam", 20000, "makanan");
-        data.menu[3] = new Menu("Gado-Gado", 10000, "makanan");
+        data.menu.add(new Menu("Nasi Goreng", 15000, "makanan"));
+        data.menu.add(new Menu("Mie Ayam", 12000, "makanan"));
+        data.menu.add(new Menu("Sate Ayam", 20000, "makanan"));
+        data.menu.add(new Menu("Gado-Gado", 10000, "makanan"));
 
-        data.menu[4] = new Menu("Es Teh", 5000, "minuman");
-        data.menu[5] = new Menu("Es Jeruk", 7000, "minuman");
-        data.menu[6] = new Menu("Kopi Hitam", 8000, "minuman");
-        data.menu[7] = new Menu("Jus Alpukat", 15000, "minuman");
+        data.menu.add(new Menu("Es Teh", 5000, "minuman"));
+        data.menu.add(new Menu("Es Jeruk", 7000, "minuman"));
+        data.menu.add(new Menu("Kopi Hitam", 8000, "minuman"));
+        data.menu.add(new Menu("Jus Alpukat", 15000, "minuman"));
     }
 
     void tampilkanMenu(){
         System.out.println("=== MENU MAKANAN ===");
-        System.out.println("1. " + data.menu[0].nama + " - Rp " + data.menu[0].harga);
-        System.out.println("2. " + data.menu[1].nama + " - Rp " + data.menu[1].harga);
-        System.out.println("3. " + data.menu[2].nama + " - Rp " + data.menu[2].harga);
-        System.out.println("4. " + data.menu[3].nama + " - Rp " + data.menu[3].harga);
+        for (Menu item : data.menu) {
+            if (item.kategori.equals("makanan")) {
+                System.out.println(item.nama + " - Rp " + item.harga);
+            }
+        }
 
         System.out.println("\n=== MENU MINUMAN ===");
-        System.out.println("5. " + data.menu[4].nama + " - Rp " + data.menu[4].harga);
-        System.out.println("6. " + data.menu[5].nama + " - Rp " + data.menu[5].harga);
-        System.out.println("7. " + data.menu[6].nama + " - Rp " + data.menu[6].harga);
-        System.out.println("8. " + data.menu[7].nama + " - Rp " + data.menu[7].harga);
+        for (Menu item : data.menu) {
+            if (item.kategori.equals("minuman")) {
+                System.out.println(item.nama + " - Rp " + item.harga);
+            }
+        }
+    }
+
+    void tambahMenu(){
+        try {
+            System.out.print("Masukkan nama menu baru: ");
+            String nama = this.input.nextLine();
+            if(nama.isEmpty()) throw new Exception("Input tidak boleh kosong");
+
+            System.out.print("Masukkan harga menu baru: ");
+            int harga = this.input.nextInt();
+            this.input.nextLine(); 
+            if(harga <= 0) throw new Exception("Harga harus lebih dari 0");
+
+            System.out.print("Masukkan kategori menu baru (makanan/minuman): ");
+            String kategori = this.input.nextLine();
+            if(!kategori.equals("makanan") && !kategori.equals("minuman")) {
+                throw new Exception("Kategori harus 'makanan' atau 'minuman'");
+            }
+
+            data.menu.add(new Menu(nama, harga, kategori));
+            System.out.println("Menu baru berhasil ditambahkan.");
+          
+            this.input.nextLine(); 
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.tambahMenu();
+            return;
+        }
     }
 
 }
@@ -166,27 +199,10 @@ class App {
         admin.isiMenu();
         admin.tampilkanMenu();
 
-        customer.pilihMenu(1);
-        if (!customer.isLanjut()) {
-            cetakStruk();
-            return;
-        }
-        
-        customer.pilihMenu(2);
-        if (!customer.isLanjut()) {
-            cetakStruk();
-            return;
-        }
-        
-        customer.pilihMenu(3);
-        if (!customer.isLanjut()) {
-            cetakStruk();
-            return;
-        }
+        admin.tambahMenu();
+        admin.tampilkanMenu();
 
-        customer.pilihMenu(4);
-        cetakStruk();
-
+        
         customer.input.close();
         admin.input.close();
         return;
@@ -197,7 +213,6 @@ class App {
             if (pesanan != null) {
                 data.total += pesanan.getTotalHarga();
             }
-            
         }
     }
 
