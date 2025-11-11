@@ -166,6 +166,8 @@ class App {
 
     void adminPage(){
         System.out.println("\n=== HALAMAN ADMIN ===");
+        tampilkanMenu();
+        System.out.println("\n=== MANAGEMENT ===");
         System.out.println("1. Tambah Menu");
         System.out.println("2. Hapus Menu");
         System.out.println("3. Edit Menu");
@@ -213,7 +215,7 @@ class App {
         while(lanjut){
             pilihMenu(num);
             num++;
-            lanjut = isLanjut();
+            lanjut = confirm("Apakah Anda ingin memesan lagi?");
         }
 
         cetakStruk();
@@ -262,13 +264,18 @@ class App {
 
     void hapusMenu(){
         try {
-            System.out.print("Masukkan nama menu yang akan dihapus: ");
+            System.out.print("Masukkan nomor menu yang akan dihapus: ");
             int index = this.input.nextInt();
 
-            if (data.deleteByIndex(index - 1)) {
+            Menu dipilih = data.getMenuByIndex(index - 1);
+            if (dipilih == null) throw new Exception("Nomor menu tidak valid."); 
+            this.input.nextLine();
+
+            if(confirm("Apakah Anda yakin ingin menghapus menu " + dipilih.nama + "?")) {
+                data.deleteByIndex(index - 1);
                 System.out.println("Menu berhasil dihapus.");
             } else {
-                throw new Exception("Nama menu tidak valid.");
+                System.out.println("Penghapusan dibatalkan.");
             }
 
             this.input.nextLine(); 
@@ -286,9 +293,7 @@ class App {
             int index = this.input.nextInt();
 
             Menu dipilih = data.getMenuByIndex(index - 1);
-                
             if (dipilih == null) throw new Exception("Nomor menu tidak valid.");
-           
             this.input.nextLine(); 
             
             System.out.println("Menu dipilih : " + dipilih.nama);
@@ -299,9 +304,14 @@ class App {
             int hargaBaru = this.input.nextInt();
             this.input.nextLine(); 
 
-            data.editMenu(index - 1, new Menu(namaBaru, hargaBaru, dipilih.kategori));
-            System.out.println("Menu berhasil diubah.");
+            if(confirm("Apakah Anda yakin ingin mengubah menu " + dipilih.nama + "?")) {
+                data.editMenu(index - 1, new Menu(namaBaru, hargaBaru, dipilih.kategori));
+                System.out.println("Menu berhasil diubah.");
+            } else {
+                System.out.println("Pengubahan dibatalkan.");
+            }
 
+            this.input.nextLine();
         } catch (Exception e) {
             System.out.println("Input tidak valid. Silakan coba lagi.");
             this.input.nextLine(); 
@@ -314,17 +324,15 @@ class App {
         System.out.print("\nPilih menu ke " + num + ": ");
 
         try {
-            int pilihan = this.input.nextInt();
+            int index = this.input.nextInt();
 
-            if(pilihan < 1 || pilihan > data.menu.size()) throw new Exception();
+            Menu menuDipilih = data.getMenuByIndex(index - 1);
+            if (menuDipilih == null) throw new Exception("Nomor menu tidak valid.");
             
             System.out.print("Jumlah: ");
             int jumlah = this.input.nextInt();
 
-            Menu menuDipilih = data.getMenuByIndex(pilihan);
-
             data.daftarPesanan.add(new Pesanan(menuDipilih, jumlah));
-
             System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
 
             this.input.nextLine(); 
@@ -368,16 +376,17 @@ class App {
         }
     }
 
-    Boolean isLanjut(){
-        System.out.print("Apakah Anda ingin memesan lagi? (y/n): ");
+    Boolean confirm(String message){
+        System.out.print(message + " (ya/tidak): ");
         String lanjut = this.input.nextLine();
 
-        if(lanjut.equalsIgnoreCase("y")){
+        if(lanjut.equalsIgnoreCase("ya")){
             return true;
-        } else if(lanjut.equalsIgnoreCase("n")){
+        } else if(lanjut.equalsIgnoreCase("tidak")){
             return false;
-        } 
-        return false;
+        } else {
+            return confirm(message);
+        }
     }
    
     void tampilkanMenu(){
