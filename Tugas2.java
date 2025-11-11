@@ -130,14 +130,93 @@ class App {
 
     void start(){
         isiMenu();
-        tampilkanMenu();
-
-        editMenu();
-        tampilkanMenu();
-
+        homePage();
         
         input.close();
         return;
+    }
+
+    void homePage(){
+        System.out.println("\n=== SELAMAT DATANG DI RESTAURANT SUKA SUKA SAYA ===");
+        System.out.println("1. Admin");
+        System.out.println("2. Customer");
+        System.out.print("Pilih menu: ");
+
+        try {
+            int pilihan = this.input.nextInt();
+            this.input.nextLine(); 
+
+            switch (pilihan) {
+                case 1:
+                    adminPage();
+                    break;
+                case 2:
+                    customerPage();
+                    break;
+                default:
+                    throw new Exception("Pilihan tidak valid.");
+            }
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.homePage();
+            return;
+        }
+    }
+
+    void adminPage(){
+        System.out.println("\n=== HALAMAN ADMIN ===");
+        System.out.println("1. Tambah Menu");
+        System.out.println("2. Hapus Menu");
+        System.out.println("3. Edit Menu");
+        System.out.println("4. Kembali ke Halaman Utama");
+        System.out.print("Pilih menu: ");
+
+        try {
+            int pilihan = this.input.nextInt();
+            this.input.nextLine(); 
+
+            switch (pilihan) {
+                case 1:
+                    tambahMenu();
+                    adminPage();
+                    break;
+                case 2:
+                    hapusMenu();
+                    adminPage();
+                    break;
+                case 3:
+                    editMenu();
+                    adminPage();
+                    break;
+                case 4:
+                    homePage();
+                    return;
+                default:
+                    throw new Exception("Pilihan tidak valid.");
+            }
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.adminPage();
+            return;
+        }
+    }
+
+    void customerPage(){
+        System.out.println("\n=== HALAMAN CUSTOMER ===");
+        tampilkanMenu();
+
+        Boolean lanjut = true;
+        int num = 1;
+
+        while(lanjut){
+            pilihMenu(num);
+            num++;
+            lanjut = isLanjut();
+        }
+
+        cetakStruk();
     }
 
     void isiMenu(){
@@ -231,26 +310,24 @@ class App {
         }
     }
 
-    void pilihMenu(Integer num){
+    void pilihMenu(int num){
         System.out.print("\nPilih menu ke " + num + ": ");
 
         try {
-            String pilihan = this.input.nextLine();
+            int pilihan = this.input.nextInt();
 
-            if(pilihan.isEmpty()){
-                throw new Exception("Input tidak boleh kosong");
-            }
+            if(pilihan < 1 || pilihan > data.menu.size()) throw new Exception();
             
             System.out.print("Jumlah: ");
-            // int jumlah = this.input.nextInt();
+            int jumlah = this.input.nextInt();
 
-            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
+            Menu menuDipilih = data.getMenuByIndex(pilihan);
 
-            // data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
+            data.daftarPesanan.add(new Pesanan(menuDipilih, jumlah));
 
-            // System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
+            System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
 
-            // this.input.nextLine(); 
+            this.input.nextLine(); 
         } catch (Exception e) {
             System.out.println("Input tidak valid. Silakan coba lagi.");
             this.input.nextLine(); 
