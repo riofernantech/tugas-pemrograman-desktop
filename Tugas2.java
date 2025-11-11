@@ -33,7 +33,15 @@ class RestaurantData {
     ArrayList<Pesanan> daftarPesanan = new ArrayList<>();
     Pesanan[] daftarBonus = new Pesanan[1];
 
-    Integer total = 0;
+    int getTotal() {
+        int total = 0;
+        for (Pesanan pesanan : daftarPesanan) {
+            if (pesanan != null) {
+                total += pesanan.getTotalHarga();
+            }
+        }
+        return total;
+    }
 
     void addMenu(Menu newItem) {
         if (menu.isEmpty()) {
@@ -112,93 +120,24 @@ class RestaurantData {
     }
 }
 
-class Customer {
+class App {
     private RestaurantData data;
     protected Scanner input = new Scanner(System.in);
 
-    Customer(RestaurantData data) {
-        this.data = data;
+    public App() {
+        this.data = new RestaurantData();
     }
 
-    void pilihMenu(Integer num){
-        System.out.print("\nPilih menu ke " + num + ": ");
+    void start(){
+        isiMenu();
+        tampilkanMenu();
 
-        try {
-            String pilihan = this.input.nextLine();
+        editMenu();
+        tampilkanMenu();
 
-            if(pilihan.isEmpty()){
-                throw new Exception("Input tidak boleh kosong");
-            }
-            
-            System.out.print("Jumlah: ");
-            // int jumlah = this.input.nextInt();
-
-            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
-
-            // data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
-
-            // System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
-
-            // this.input.nextLine(); 
-        } catch (Exception e) {
-            System.out.println("Input tidak valid. Silakan coba lagi.");
-            this.input.nextLine(); 
-            this.pilihMenu(num);
-            return;
-        }
-    }
-
-    void pilihBonus(){
-        System.out.print("\nKamu mendapatkan bonus minuman! Silakan pilih minuman ");
-        System.out.println("\n=== MENU MINUMAN ===");
-        for (Menu item : data.menu) {
-            if (item.kategori.equals("minuman")) {
-                System.out.println(item.nama + " - Rp " + item.harga);
-            }
-        }
-
-        try {
-            System.out.print("Pilih: ");
-            String pilihan = this.input.nextLine();
-
-            if(pilihan.isEmpty()){
-                throw new Exception("Input tidak boleh kosong");
-            }
-            
-            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
-
-            // data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
-
-            // System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
-
-            this.input.nextLine(); 
-        } catch (Exception e) {
-            System.out.println("Input tidak valid. Silakan coba lagi.");
-            this.input.nextLine(); 
-            this.pilihBonus();
-            return;
-        }
-    }
-
-    Boolean isLanjut(){
-        System.out.print("Apakah Anda ingin memesan lagi? (y/n): ");
-        String lanjut = this.input.nextLine();
-
-        if(lanjut.equalsIgnoreCase("y")){
-            return true;
-        } else if(lanjut.equalsIgnoreCase("n")){
-            return false;
-        } 
-        return false;
-    }
-}
-
-class Admin{
-    private RestaurantData data;
-    protected Scanner input = new Scanner(System.in);
-
-    Admin(RestaurantData data) {
-        this.data = data;
+        
+        input.close();
+        return;
     }
 
     void isiMenu(){
@@ -292,32 +231,78 @@ class Admin{
         }
     }
 
-}
+    void pilihMenu(Integer num){
+        System.out.print("\nPilih menu ke " + num + ": ");
 
-class App {
-    private RestaurantData data;
-    private Customer customer;
-    private Admin admin;
+        try {
+            String pilihan = this.input.nextLine();
 
-    public App() {
-        this.data = new RestaurantData(); 
-        this.admin = new Admin(this.data);
-        this.customer = new Customer(this.data);
+            if(pilihan.isEmpty()){
+                throw new Exception("Input tidak boleh kosong");
+            }
+            
+            System.out.print("Jumlah: ");
+            // int jumlah = this.input.nextInt();
+
+            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) - 1];
+
+            // data.daftarPesanan[num - 1] = new Pesanan(menuDipilih, jumlah);
+
+            // System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
+
+            // this.input.nextLine(); 
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.pilihMenu(num);
+            return;
+        }
     }
 
-    void start(){
-        admin.isiMenu();
-        tampilkanMenu();
+    void pilihBonus(){
+        System.out.print("\nKamu mendapatkan bonus minuman! Silakan pilih minuman ");
+        System.out.println("\n=== MENU MINUMAN ===");
+        for (Menu item : data.menu) {
+            if (item.kategori.equals("minuman")) {
+                System.out.println(item.nama + " - Rp " + item.harga);
+            }
+        }
 
-        admin.editMenu();
-        tampilkanMenu();
+        try {
+            System.out.print("Pilih: ");
+            String pilihan = this.input.nextLine();
 
-        
-        customer.input.close();
-        admin.input.close();
-        return;
+            if(pilihan.isEmpty()){
+                throw new Exception("Input tidak boleh kosong");
+            }
+            
+            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
+
+            // data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
+
+            // System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
+
+            this.input.nextLine(); 
+        } catch (Exception e) {
+            System.out.println("Input tidak valid. Silakan coba lagi.");
+            this.input.nextLine(); 
+            this.pilihBonus();
+            return;
+        }
     }
 
+    Boolean isLanjut(){
+        System.out.print("Apakah Anda ingin memesan lagi? (y/n): ");
+        String lanjut = this.input.nextLine();
+
+        if(lanjut.equalsIgnoreCase("y")){
+            return true;
+        } else if(lanjut.equalsIgnoreCase("n")){
+            return false;
+        } 
+        return false;
+    }
+   
     void tampilkanMenu(){
         System.out.println("=== MENU MAKANAN ===");
         int index = 1;
@@ -335,32 +320,24 @@ class App {
         }
     }
 
-    void hitungTotal() {
-        for (Pesanan pesanan : data.daftarPesanan) {
-            if (pesanan != null) {
-                data.total += pesanan.getTotalHarga();
-            }
-        }
-    }
-
     void cetakStruk(){
-        this.hitungTotal();
+        int total = data.getTotal();
 
-        int totalSebelumPajak = data.total;
-        int pajak = data.total * 10 / 100;
+        int totalSebelumPajak = total;
+        int pajak = total * 10 / 100;
         Integer pelayanan = 20000;
 
         int diskon = 0;
-        if (data.total > 100000) {
-            diskon = data.total * 10 / 100;
-            data.total -= diskon;
+        if (total > 100000) {
+            diskon = total * 10 / 100;
+            total -= diskon;
         }
 
         if (totalSebelumPajak > 50000) {
-            customer.pilihBonus();
+            pilihBonus();
         }
 
-        int totalAkhir = data.total + pajak + pelayanan;
+        int totalAkhir = total + pajak + pelayanan;
 
         System.out.println("\n===== DAFTAR PESANAN =====");
         System.out.printf("%-25s %8s %15s%n", "Nama Item", "Jumlah", "Subtotal");
