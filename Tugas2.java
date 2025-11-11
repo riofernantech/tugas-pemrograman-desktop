@@ -66,6 +66,10 @@ class RestaurantData {
         }
     }
 
+    Menu[] getAllMenus() {
+        return menu.toArray(new Menu[0]);
+    }
+
     Menu[] getMakanan() {
         return menu.stream()
             .filter(item -> item.kategori.equals("makanan"))
@@ -85,15 +89,6 @@ class RestaurantData {
         return null;
     }
 
-    Menu getMenuByName(String name) {
-        for (Menu item : menu) {
-            if (item.nama.equalsIgnoreCase(name)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
     Boolean editMenu(int index, Menu newItem) {
         if (index >= 0 && index < menu.size()) {
             menu.set(index, newItem);
@@ -105,15 +100,6 @@ class RestaurantData {
     Boolean deleteByIndex(int index) {
         if (index >= 0 && index < menu.size()) {
             menu.remove(index);
-            return true;
-        }
-        return false;
-    }
-
-    Boolean deleteByName(String name) {
-        Menu itemToRemove = getMenuByName(name);
-        if (itemToRemove != null) {
-            menu.remove(itemToRemove);
             return true;
         }
         return false;
@@ -268,7 +254,7 @@ class App {
             int index = this.input.nextInt();
 
             Menu dipilih = data.getMenuByIndex(index - 1);
-            if (dipilih == null) throw new Exception("Nomor menu tidak valid."); 
+            if (dipilih == null) throw new Exception(); 
             this.input.nextLine();
 
             if(confirm("Apakah Anda yakin ingin menghapus menu " + dipilih.nama + "?")) {
@@ -327,7 +313,7 @@ class App {
             int index = this.input.nextInt();
 
             Menu menuDipilih = data.getMenuByIndex(index - 1);
-            if (menuDipilih == null) throw new Exception("Nomor menu tidak valid.");
+            if (menuDipilih == null) throw new Exception();
             
             System.out.print("Jumlah: ");
             int jumlah = this.input.nextInt();
@@ -347,25 +333,22 @@ class App {
     void pilihBonus(){
         System.out.print("\nKamu mendapatkan bonus minuman! Silakan pilih minuman ");
         System.out.println("\n=== MENU MINUMAN ===");
-        for (Menu item : data.menu) {
-            if (item.kategori.equals("minuman")) {
-                System.out.println(item.nama + " - Rp " + item.harga);
+        Menu[] menu = data.getAllMenus();
+        for (int i = 0; i < menu.length; i++) {
+            if (menu[i].kategori.equals("minuman")) {
+                System.out.println(i + 1 + " " + menu[i].nama + " - Rp " + menu[i].harga);
             }
         }
 
         try {
             System.out.print("Pilih: ");
-            String pilihan = this.input.nextLine();
-
-            if(pilihan.isEmpty()){
-                throw new Exception("Input tidak boleh kosong");
-            }
+            int index = this.input.nextInt();
             
-            // Menu menuDipilih = data.menu[Integer.parseInt(pilihan) + 3];
+            Menu menuDipilih = data.getMenuByIndex(index - 1);
+            if (menuDipilih.kategori.equals("makanan")) throw new Exception();
 
-            // data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
-
-            // System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
+            data.daftarBonus[0] = new Pesanan(menuDipilih, 1);
+            System.out.println("Anda memilih " + menuDipilih.nama + " sebagai bonus minuman.");
 
             this.input.nextLine(); 
         } catch (Exception e) {
