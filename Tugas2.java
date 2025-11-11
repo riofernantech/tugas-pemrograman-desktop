@@ -66,6 +66,22 @@ class RestaurantData {
         }
     }
 
+    void addPesanan(Pesanan newOrder) {
+        if (daftarPesanan.isEmpty()) {
+            daftarPesanan.add(newOrder);
+            return;
+        }
+
+        for (int i = 0; i < daftarPesanan.size(); i++) {
+            if (daftarPesanan.get(i).menu.equals(newOrder.menu)) {
+                daftarPesanan.get(i).jumlah += newOrder.jumlah;
+                return;
+            }
+        }
+        
+        daftarPesanan.add(newOrder);
+    }
+
     Menu[] getAllMenus() {
         return menu.toArray(new Menu[0]);
     }
@@ -318,7 +334,7 @@ class App {
             System.out.print("Jumlah: ");
             int jumlah = this.input.nextInt();
 
-            data.daftarPesanan.add(new Pesanan(menuDipilih, jumlah));
+            data.addPesanan(new Pesanan(menuDipilih, jumlah));
             System.out.println("Anda memesan " + menuDipilih.nama + " sebanyak " + jumlah);
 
             this.input.nextLine(); 
