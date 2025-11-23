@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 abstract class MenuItem {
     String nama;
@@ -176,7 +179,7 @@ class App {
     }
 
     void start(){
-        isiMenu();
+        loadMenu();
         homePage();
 
         input.close();
@@ -268,16 +271,35 @@ class App {
         cetakStruk();
     }
 
-    void isiMenu(){
-        menu.addItem(new Makanan("Nasi Goreng", 15000));
-        menu.addItem(new Makanan("Mie Ayam", 12000));
-        menu.addItem(new Makanan("Sate Ayam", 20000));
-        menu.addItem(new Makanan("Gado-Gado", 10000));
+    void loadMenu(){
+        String fileName = "file.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
 
-        menu.addItem(new Minuman("Es Teh", 5000));
-        menu.addItem(new Minuman("Es Jeruk", 7000));
-        menu.addItem(new Minuman("Kopi Hitam", 8000));
-        menu.addItem(new Minuman("Jus Alpukat", 15000));
+                if (parts.length != 3) {
+                    System.err.println("Format salah: " + line);
+                    continue;
+                }
+
+                String nama = parts[0].trim();
+                String hargaStr = parts[1].trim();
+                String kategori = parts[2].trim().toLowerCase();
+
+                int harga = Integer.parseInt(hargaStr);
+
+                if (kategori.equals("makanan")) {
+                    menu.addItem(new Makanan(nama, harga));
+                } else if (kategori.equals("minuman")) {
+                    menu.addItem(new Minuman(nama, harga));
+                } else {
+                    System.err.println("Kategori tidak dikenal: " + kategori);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
     }
 
     void tambahMenu(){
