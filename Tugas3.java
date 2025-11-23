@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -302,6 +304,23 @@ class App {
         }
     }
 
+    void storeMenu() {
+        String fileName = "file.txt";
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+
+            for (MenuItem item : this.menu.getAll()) {
+                String line = item.nama + ", " + (int)item.harga + ", " + item.kategori;
+                bw.write(line);
+                bw.newLine();
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error writing file: " + e.getMessage());
+        }
+    }
+
+
     void tambahMenu(){
         try {
             System.out.print("Masukkan nama menu baru: ");
@@ -326,6 +345,8 @@ class App {
             }
 
             System.out.println("Menu baru berhasil ditambahkan.");
+
+            storeMenu();
 
             this.input.nextLine();
         } catch (Exception e) {
