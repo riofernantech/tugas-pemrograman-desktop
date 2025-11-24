@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.IOException;
 
 abstract class MenuItem {
@@ -270,7 +273,7 @@ class App {
             lanjut = confirm("Apakah Anda ingin memesan lagi?");
         }
 
-        generateStruk();
+        tampilkanStruk();
     }
 
     void loadMenu(){
@@ -368,9 +371,12 @@ class App {
             if(confirm("Apakah Anda yakin ingin menghapus menu " + dipilih.nama + "?")) {
                 menu.delete(index - 1);
                 System.out.println("Menu berhasil dihapus.");
+
+                storeMenu();
             } else {
                 System.out.println("Penghapusan dibatalkan.");
             }
+
 
             this.input.nextLine();
         } catch (Exception e) {
@@ -407,9 +413,12 @@ class App {
                 }
                 menu.edit(index - 1, baru);
                 System.out.println("Menu berhasil diubah.");
+                
+                storeMenu();
             } else {
                 System.out.println("Pengubahan dibatalkan.");
             }
+
 
             this.input.nextLine();
         } catch (Exception e) {
@@ -558,6 +567,17 @@ class App {
             bw.write(sb.toString());
         } catch (IOException e) {
             System.err.println("Gagal menyimpan struk: " + e.getMessage());
+        }
+    }
+
+    void tampilkanStruk(){
+        generateStruk();
+
+        Path filePath = Paths.get("struk.txt");
+        try {
+            System.out.println(Files.readString(filePath));
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
         }
     }
 

@@ -2,17 +2,17 @@
 ===== DAFTAR PESANAN =====
 Nama Item                   Jumlah        Subtotal
 ---------------------------------------------------------
-aswlagi                          2       Rp 112728
+Nasi Goreng                      3        Rp 45000
 Sate Ayam                        5       Rp 100000
-testfirst                        6     Rp 13941138
+Jus Alpukat                      2        Rp 30000
 
 ===== STRUK PEMBAYARAN =====
-Total Harga Pesanan : Rp 14153866
-Diskon 10% : - Rp 1415386
-Pajak 10% : Rp 1415386
+Total Harga Pesanan : Rp 175000
+Diskon 10% : - Rp 17500
+Pajak 10% : Rp 17500
 Biaya Pelayanan : Rp 20000
 ----------------------------
-Total Bayar : Rp 14173865
+Total Bayar : Rp 195000
 
 * BONUS: Anda mendapatkan gratis 1 Es Jeruk!
 ==============================
