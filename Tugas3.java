@@ -43,7 +43,7 @@ class Makanan extends MenuItem {
 
     @Override
     void tampilMenu() {
-        System.out.println(nama + " - Rp " + (int)harga + " (Makanan: " + jenis + ")");
+        System.out.println(nama + " - Rp " + (int)harga);
     }
 }
 
@@ -56,7 +56,7 @@ class Minuman extends MenuItem {
 
     @Override
     void tampilMenu() {
-        System.out.println(nama + " - Rp " + (int)harga + " (Minuman: " + jenis + ")");
+        System.out.println(nama + " - Rp " + (int)harga);
     }
 }
 
@@ -270,11 +270,11 @@ class App {
             lanjut = confirm("Apakah Anda ingin memesan lagi?");
         }
 
-        cetakStruk();
+        generateStruk();
     }
 
     void loadMenu(){
-        String fileName = "file.txt";
+        String fileName = "menu.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -305,7 +305,7 @@ class App {
     }
 
     void storeMenu() {
-        String fileName = "file.txt";
+        String fileName = "menu.txt";
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
 
@@ -319,7 +319,6 @@ class App {
             System.err.println("Error writing file: " + e.getMessage());
         }
     }
-
 
     void tambahMenu(){
         try {
@@ -492,19 +491,21 @@ class App {
         int index = 1;
         MenuItem[] makanan = menu.getMakanan();
         for (MenuItem item : makanan) {
-            System.out.println(index + " " + item.nama + " - Rp " + (int)item.harga);
+            System.out.print(index + " ");
+            item.tampilMenu();
             index++;
         }
-
+        
         System.out.println("\n=== MENU MINUMAN ===");
         MenuItem[] minuman = menu.getMinuman();
         for (MenuItem item : minuman) {
-            System.out.println(index + " " + item.nama + " - Rp " + (int)item.harga);
+            System.out.print(index + " ");
+            item.tampilMenu();
             index++;
         }
     }
 
-    void cetakStruk(){
+    void generateStruk(){
         double total = pesanan.getTotal();
 
         double totalSebelumPajak = total;
@@ -517,39 +518,47 @@ class App {
             total -= diskon;
         }
 
-        if (totalSebelumPajak > 50000) {
-            pilihBonus();
-        }
-
+        if (totalSebelumPajak > 50000) pilihBonus();
+        
         double totalAkhir = total + pajak + pelayanan;
 
-        System.out.println("\n===== DAFTAR PESANAN =====");
-        System.out.printf("%-25s %8s %15s%n", "Nama Item", "Jumlah", "Subtotal");
-        System.out.println("---------------------------------------------------------");
+        StringBuilder sb = new StringBuilder();
 
-        for (PesananItem pesanan : pesanan.getAll()) {
-            if (pesanan != null) {
-                System.out.printf(
-                    "%-25s %8d %15s%n",
-                    pesanan.menu.nama,
-                    pesanan.jumlah,
-                    "Rp " + (int)pesanan.getTotalHarga()
+        sb.append("\n===== DAFTAR PESANAN =====\n");
+        sb.append(String.format("%-25s %8s %15s%n", "Nama Item", "Jumlah", "Subtotal"));
+        sb.append("---------------------------------------------------------\n");
+
+        for (PesananItem pes : pesanan.getAll()) {
+            if (pes != null) {
+                String line = String.format(
+                        "%-25s %8d %15s%n",
+                        pes.menu.nama,
+                        pes.jumlah,
+                        "Rp " + (int) pes.getTotalHarga()
                 );
+                sb.append(line);
             }
         }
 
-        System.out.println("\n===== STRUK PEMBAYARAN =====");
-        System.out.println("Total Harga Pesanan : Rp " + (int)totalSebelumPajak);
-        if (diskon > 0) System.out.println("Diskon 10% : - Rp " + (int)diskon);
-        System.out.println("Pajak 10% : Rp " + pajak);
-        System.out.println("Biaya Pelayanan : Rp " + pelayanan);
-        System.out.println("----------------------------");
-        System.out.println("Total Bayar : Rp " + (int)totalAkhir);
+        sb.append("\n===== STRUK PEMBAYARAN =====\n");
+        sb.append("Total Harga Pesanan : Rp ").append((int)totalSebelumPajak).append("\n");
+        if (diskon > 0) sb.append("Diskon 10% : - Rp ").append((int)diskon).append("\n");
+        sb.append("Pajak 10% : Rp ").append(pajak).append("\n");
+        sb.append("Biaya Pelayanan : Rp ").append(pelayanan).append("\n");
+        sb.append("----------------------------\n");
+        sb.append("Total Bayar : Rp ").append((int)totalAkhir).append("\n");
 
-        if (daftarBonus[0] != null)
-            System.out.println("\n* BONUS: Anda mendapatkan gratis 1 " + daftarBonus[0].menu.nama + "!");
+        if (daftarBonus[0] != null) {
+            sb.append("\n* BONUS: Anda mendapatkan gratis 1 " + daftarBonus[0].menu.nama + "!\n");
+        }
 
-        System.out.println("==============================");
+        sb.append("==============================\n");
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("struk.txt"))) {
+            bw.write(sb.toString());
+        } catch (IOException e) {
+            System.err.println("Gagal menyimpan struk: " + e.getMessage());
+        }
     }
 
 }

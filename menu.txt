@@ -1,0 +1,10 @@
+Nasi Goreng, 15000, makanan
+Mie Ayam, 12000, makanan
+Sate Ayam, 20000, makanan
+Gado-Gado, 10000, makanan
+testfirst, 2323523, makanan
+Es Teh, 5000, minuman
+Es Jeruk, 7000, minuman
+Kopi Hitam, 8000, minuman
+Jus Alpukat, 15000, minuman
+aswlagi, 56364, minuman

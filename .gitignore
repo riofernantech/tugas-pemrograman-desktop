@@ -4,4 +4,6 @@
 # But not these files...
 !.gitignore
 !Tugas3.java
+!menu.txt
+!struk.txt
 # etc...
