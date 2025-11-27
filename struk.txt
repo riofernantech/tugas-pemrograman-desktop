@@ -2,17 +2,18 @@
 ===== DAFTAR PESANAN =====
 Nama Item                   Jumlah        Subtotal
 ---------------------------------------------------------
-Nasi Goreng                      3        Rp 45000
 Sate Ayam                        5       Rp 100000
-Jus Alpukat                      2        Rp 30000
+Bakso                            5        Rp 50000
+Nasi Goreng                      2        Rp 30000
+Es Teh                           2        Rp 10000
 
 ===== STRUK PEMBAYARAN =====
-Total Harga Pesanan : Rp 175000
-Diskon 10% : - Rp 17500
-Pajak 10% : Rp 17500
+Total Harga Pesanan : Rp 190000
+Diskon 10% : - Rp 19000
+Pajak 10% : Rp 19000
 Biaya Pelayanan : Rp 20000
 ----------------------------
-Total Bayar : Rp 195000
+Total Bayar : Rp 210000
 
-* BONUS: Anda mendapatkan gratis 1 Es Jeruk!
+* BONUS: Anda mendapatkan gratis 1 Kopi Hitam!
 ==============================
